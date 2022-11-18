@@ -7,10 +7,13 @@ export default function Header() {
             <h1 className="py-4 px-4 font-bold text-3xl">NFT Marketplace</h1>
             <div className="flex flex-row items-center">
                 <Link href="/">
-                    <a className="mr-4 p-6">Home</a>
+                    <a className="mr-4 p-6">Listings</a>
                 </Link>
-                <Link href="/sell-nft">
-                    <a className="mr-4 p-6">Sell NFT</a>
+                <Link href="/my-nfts">
+                    <a className="mr-4 p-6">My NFTs</a>
+                </Link>
+                <Link href="/mint-list-nft">
+                    <a className="mr-4 p-6">Mint&List NFT</a>
                 </Link>
                 <ConnectButton moralisAuth={false} />
             </div>

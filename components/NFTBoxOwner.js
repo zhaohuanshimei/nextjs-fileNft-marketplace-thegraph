@@ -7,39 +7,74 @@ import { Card, useNotification } from "web3uikit"
 import { ethers } from "ethers"
 import UpdateListingModal from "./UpdateListingModal"
 
-const truncateStr = (fullStr, strLen) => {
-    if (fullStr.length <= strLen) return fullStr
+// const truncateStr = (fullStr, strLen) => {
+//     if (fullStr.length <= strLen) return fullStr
 
-    const separator = "..."
-    const seperatorLength = separator.length
-    const charsToShow = strLen - seperatorLength
-    const frontChars = Math.ceil(charsToShow / 2)
-    const backChars = Math.floor(charsToShow / 2)
-    return (
-        fullStr.substring(0, frontChars) +
-        separator +
-        fullStr.substring(fullStr.length - backChars)
-    )
-}
+//     const separator = "..."
+//     const seperatorLength = separator.length
+//     const charsToShow = strLen - seperatorLength
+//     const frontChars = Math.ceil(charsToShow / 2)
+//     const backChars = Math.floor(charsToShow / 2)
+//     return (
+//         fullStr.substring(0, frontChars) +
+//         separator +
+//         fullStr.substring(fullStr.length - backChars)
+//     )
+// }
 
-export default function NFTBox({
+export default function NFTBoxOwner({
     price,
     nftAddress,
-    amountSold,
-    amountListed,
+    amount,
     tokenId,
     marketplaceAddress,
-    seller,
+    owner,
 }) {
+    const { runContractFunction } = useWeb3Contract()
     const { isWeb3Enabled, account } = useMoralis()
     const [imageURI, setImageURI] = useState("")
     const [tokenName, setTokenName] = useState("")
+
+    const [FileIPFS, setFileIPFS] = useState("")
+    const [FilePassword, setFilePassword] = useState("")
+
     // const [amountSold, setAmountSold] = useState("")
-    // const [amountListed, setAmountListed] = useState("")
+    // const [amount, setAmount] = useState("")
     const [tokenDescription, setTokenDescription] = useState("")
     const [showModal, setShowModal] = useState(false)
     const hideModal = () => setShowModal(false)
     const dispatch = useNotification()
+
+    async function setupUI() {
+        const getFileInfo = await runContractFunction({
+            params: {
+                abi: nftAbi,
+                contractAddress: nftAddress,
+                functionName: "readFileInfo",
+                params: {
+                    NftID: tokenId,
+                },
+            },
+            onError: (error) => console.log(error),
+        })
+        if (getFileInfo) {
+            console.log(getFileInfo)
+            const filePerUrl = "https://ipfs.io/ipfs/"
+            const fileUrl = filePerUrl.concat(getFileInfo[0])
+            setFileIPFS(fileUrl)
+            setFilePassword(getFileInfo[1].toString())
+        }
+    }
+    // const { runContractFunction: buyItem } = useWeb3Contract({
+    //     abi: nftMarketplaceAbi,
+    //     contractAddress: marketplaceAddress,
+    //     functionName: "buyItem",
+    //     msgValue: price,
+    //     params: {
+    //         seller: seller,
+    //         tokenId: tokenId,
+    //     },
+    // })
 
     const { runContractFunction: getTokenURI } = useWeb3Contract({
         abi: nftAbi,
@@ -50,23 +85,12 @@ export default function NFTBox({
         },
     })
 
-    const { runContractFunction: buyItem } = useWeb3Contract({
-        abi: nftMarketplaceAbi,
-        contractAddress: marketplaceAddress,
-        functionName: "buyItem",
-        msgValue: price,
-        params: {
-            seller: seller,
-            tokenId: tokenId,
-        },
-    })
-
     async function updateUI() {
         const tokenURI = await getTokenURI({
             onError: (error) => console.log(error),
         })
-        console.log(`The TokenURI is ${tokenURI}`)
-        // We are going to cheat a little here...
+        // console.log(`The TokenURI is ${tokenURI}`)
+
         if (tokenURI) {
             const requestURL = tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/")
             const tokenURIResponse = await (await fetch(requestURL)).json()
@@ -76,6 +100,7 @@ export default function NFTBox({
             setImageURI(imageURIURL)
             // setTokenName(tokenURI.name)
             // setTokenDescription(tokenURI.description)
+            setupUI()
         }
     }
 
@@ -85,16 +110,16 @@ export default function NFTBox({
         }
     }, [isWeb3Enabled])
 
-    const isOwnedByUser = seller === account || seller === undefined
+    const isOwnedByUser = owner === account || owner === undefined
     const formattedSellerAddress = isOwnedByUser ? "you" : truncateStr(seller || "", 15)
 
     const handleCardClick = () => {
-        isOwnedByUser
-            ? setShowModal(true)
-            : buyItem({
-                  onError: () => handleBuyItemError(),
-                  onSuccess: () => handleBuyItemSuccess(),
-              })
+        // isOwnedByUser
+        setShowModal(true)
+        // : buyItem({
+        //       onError: () => handleBuyItemError(),
+        //       onSuccess: () => handleBuyItemSuccess(),
+        //   })
     }
 
     const handleBuyItemSuccess = () => {
@@ -133,12 +158,15 @@ export default function NFTBox({
                             onClick={handleCardClick}
                         >
                             <div className="p-2">
-                                <div className="flex flex-col items-end gap-2">
+                                <div className="flex-col items-end gap-2">
                                     <div>#{tokenId}</div>
-                                    <div className="italic text-sm">
-                                        Owned by {formattedSellerAddress}
+                                    {/* <div className="italic text-sm">
+                                        File IPFS {formattedSellerAddress}
                                     </div>
-                                    <div className="font-bold">Items have sold {amountSold} </div>
+                                    <div className="italic text-sm">
+                                        File Password {formattedSellerAddress}
+                                    </div> */}
+
                                     <Image
                                         loader={() => imageURI}
                                         src={imageURI}
@@ -148,10 +176,17 @@ export default function NFTBox({
                                     <div className="font-bold">
                                         {ethers.utils.formatUnits(price, "ether")} ETH
                                     </div>
-                                    <div className="font-bold">{amountListed} items for sell</div>
+                                    <div className="font-bold">Amount You Have {amount} </div>
                                 </div>
                             </div>
                         </Card>
+                        <a href={FileIPFS} className="font-bold">
+                            File IPFS CID: {FileIPFS}
+                        </a>
+                        <div className="italic font-bold">
+                            File Access Password: {FilePassword}
+                        </div>
+                        <div className="italic text-sm"> (null) means no password</div>
                     </div>
                 ) : (
                     <div>Loading...</div>

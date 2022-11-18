@@ -1,46 +1,47 @@
-# NextJS NFT Marketplace with TheGraph
+## Inspiration
 
-*This repo has been updated for Goerli over Rinkeby.*
+The patrick's lesson inspired me.
 
-## 1. Git clone the contracts repo
+## What it does
 
-In it's own terminal / command line, run: 
+It allows people to share anything in a decentralized way.
 
-```
-git clone https://github.com/PatrickAlphaC/hardhat-nft-marketplace-fcc
-cd hardhat-nextjs-nft-marketplace-fcc
-yarn
-```
+## How we built it
 
-## 2. Deploy to goerli 
+By repeat patrick's nft-marketplace project to start, and make adjustments when the something was different, finally add some new features for the marketplace, for the nft contract and for front end.
 
-After installing dependencies, deploy your contracts to goerli:
+## Challenges we ran into
 
-```
-yarn hardhat deploy --network goerli
-```
+There were many challenges during reading English, learning patrick's lesson, coding with him, all the preparation were kind of hard for a beginner. but to develop a whole project with all basic functions were the hardest work.
 
-## 3. Deploy your subgraph
+## Accomplishments that we're proud of
 
-```
-cd ..
-git clone https://github.com/PatrickAlphaC/graph-nft-marketplace-fcc
-cd graph-nft-marketplace-fcc
-yarn
-```
+I am very happy to share the project to you as my first dAPP, and I believe that the ideas are always motivating the Web3 world.
 
-Follow the instructions of the [README](https://github.com/PatrickAlphaC/graph-nft-marketplace-fcc/blob/main/README.md) of that repo. 
+## What we learned
 
-Then, make a `.env` file and place your temporary query URL into it as `NEXT_PUBLIC_SUBGRAPH_URL`.
+The NFT standard, the NFT metadata , the ERC721 and ERC1155 details, the listener of solidity events, the GRAPH QL, and so many front end knowledge.
 
+## What's next for FileNftMarketplace
 
-## 4. Start your UI
+### Security
 
-Make sure that:
-- In your `networkMapping.json` you have an entry for `NftMarketplace` on the goerli network. 
-- You have a `NEXT_PUBLIC_SUBGRAPH_URL` in your `.env` file. 
+1. Find a more safe way to store the file password. (maybe encrypt the password first and upload to the block chain )
 
-```
-yarn dev
-```
+### FrontEnd
 
+1. Add new features
+    1. show descriptions of the fileNFT
+    2. searchable
+        1. add rank list
+        2. add search by key word
+        3. add tags for each fileNFT
+    3. duplicate files excluded
+    4. when mint a nft, users can choose a nft image form the front end
+2. Optimize the looking and the efficiency
+3. Run the front end on the sever and give it a domain
+
+### File content
+
+1. Develop copyright and sensitive content provisions
+2. Develop a media model, which allows anybody to build their own media and subscription system , and earn money form their own masterpieces
