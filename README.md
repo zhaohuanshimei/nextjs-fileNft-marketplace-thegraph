@@ -16,13 +16,16 @@ There were many challenges during reading English, learning patrick's lesson, co
 
 ## Accomplishments that we're proud of
 
-I am very happy to share the project to you as my first dAPP, and I believe that the ideas are always motivating the Web3 world.
+I am very happy to share the project to you as my first dAPP, and I believe that brilliant ideas are always motivating the Web3 world.
 
 ## What we learned
 
 The NFT standard, the NFT metadata , the ERC721 and ERC1155 details, the listener of solidity events, the GRAPH QL, and so many front end knowledge.
 
 ## What's next for FileNftMarketplace
+
+### Reduce cost
+1. May focus on cross chain and Layer2
 
 ### Security
 
@@ -31,13 +34,13 @@ The NFT standard, the NFT metadata , the ERC721 and ERC1155 details, the listene
 ### FrontEnd
 
 1. Add new features
-    1. show descriptions of the fileNFT
-    2. searchable
-        1. add rank list
-        2. add search by key word
-        3. add tags for each fileNFT
-    3. duplicate files excluded
-    4. when mint a nft, users can choose a nft image form the front end
+   1. show descriptions of the fileNFT
+   2. searchable
+      1. add rank list
+      2. add search by key word
+      3. add tags for each fileNFT
+   3. duplicate files excluded
+   4. when mint a nft, users can choose a nft image form the front end
 2. Optimize the looking and the efficiency
 3. Run the front end on the sever and give it a domain
 
